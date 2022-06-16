@@ -18,7 +18,6 @@ app.get('/', (req, res) => {
 io.on('connection', connected)
 
 function connected(socket) {
-  socket.emit('playerId', socket.id)
   socket.on('newPlayer', (data) => {
     console.log('id number: ' + socket.id + 'is connected')
     players[socket.id] = data
@@ -26,6 +25,7 @@ function connected(socket) {
     for (let id in players) {
       console.log(`${players[id].x} is x -- ${players[id].y} is y`);
     }
+    socket.emit('playerId', socket.id)
   })
   socket.on('disconnect', () => {
     delete players[socket.id]
@@ -39,5 +39,6 @@ function connected(socket) {
     players[socket.id] = data
     socket.broadcast.emit('updateToClients', players)
   })
+
   // socket.on('update', data => console.log(`${data[0].position.x} -- ${data[0].position.y}`))
 }
