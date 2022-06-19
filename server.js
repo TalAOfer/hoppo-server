@@ -22,9 +22,10 @@ function connected(socket) {
     console.log('id number: ' + socket.id + 'is connected')
     if(serverPlayers[socket.id] === undefined){
       serverPlayers[socket.id] = player
+      console.log(serverPlayers[socket.id]);
     }
     console.log('current serverPlayers : ' + Object.keys(serverPlayers).length);
-    socket.emit('playerId', socket.id)
+    // socket.emit('playerId', socket.id)
     io.emit('serverToClient', serverPlayers)
   })
   socket.on('disconnect', () => {
