@@ -9,7 +9,7 @@ const io = require('socket.io')(port, {
   }
 })
 
-let players = {}
+let serverPlayers = {}
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
@@ -18,26 +18,25 @@ app.get('/', (req, res) => {
 io.on('connection', connected)
 
 function connected(socket) {
-  socket.on('newPlayer', (data) => {
+  socket.on('newPlayer', (player) => {
     console.log('id number: ' + socket.id + 'is connected')
-    players[socket.id] = data
-    console.log('current players : ' + Object.keys(players).length);
-    for (let id in players) {
-      // console.log(players[id]);
+    if(serverPlayers[socket.id] === undefined){
+      serverPlayers[socket.id] = player
     }
+    console.log('current serverPlayers : ' + Object.keys(serverPlayers).length);
     socket.emit('playerId', socket.id)
-    io.emit('serverToClient', players)
+    io.emit('serverToClient', serverPlayers)
   })
   socket.on('disconnect', () => {
-    delete players[socket.id]
+    delete serverPlayers[socket.id]
     console.log('Goodbye id :' + socket.id + ", has disconnected");
-    console.log('current players : ' + Object.keys(players).length);
-    io.emit('serverToClient', players)
+    console.log('current serverPlayers : ' + Object.keys(serverPlayers).length);
+    io.emit('serverToClient', serverPlayers)
   })
-  socket.on('updateToServer', (data) => {
+  socket.on('updateToServer', (player) => {
     // console.log('update to server');
-    players[socket.id] = data
-    io.emit('serverToClient', players)
+    serverPlayers[socket.id] = player
+    io.emit('serverToClient', serverPlayers)
     // console.log('server to client')
   })
 
