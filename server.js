@@ -23,21 +23,22 @@ function connected(socket) {
     players[socket.id] = data
     console.log('current players : ' + Object.keys(players).length);
     for (let id in players) {
-      console.log(`${players[id].x} is x -- ${players[id].y} is y`);
+      // console.log(players[id]);
     }
     socket.emit('playerId', socket.id)
+    io.emit('serverToClient', players)
   })
   socket.on('disconnect', () => {
     delete players[socket.id]
     console.log('Goodbye id :' + socket.id + ", has disconnected");
     console.log('current players : ' + Object.keys(players).length);
-    for (let id in players) {
-      console.log(`${players[id].x} is x -- ${players[id].y} is y`);
-    }
+    io.emit('serverToClient', players)
   })
   socket.on('updateToServer', (data) => {
+    // console.log('update to server');
     players[socket.id] = data
-    socket.broadcast.emit('updateToClients', players)
+    io.emit('serverToClient', players)
+    // console.log('server to client')
   })
 
   // socket.on('update', data => console.log(`${data[0].position.x} -- ${data[0].position.y}`))
