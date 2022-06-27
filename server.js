@@ -41,5 +41,14 @@ function connected(socket) {
     // console.log('server to client')
   })
 
+  socket.on('endGame', () => {
+    // console.log('update to server');
+    serverPlayers = {}
+    console.log(serverPlayers);
+    io.emit('serverToClient', serverPlayers)
+    // console.log('server to client')
+  })
+
+
   // socket.on('update', data => console.log(`${data[0].position.x} -- ${data[0].position.y}`))
 }
