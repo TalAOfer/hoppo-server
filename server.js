@@ -20,19 +20,20 @@ io.on('connection', connected)
 function connected(socket) {
   socket.on('newPlayer', (player) => {
     console.log('id number: ' + socket.id + 'is connected')
-    if(serverPlayers[socket.id] === undefined){
+    if (serverPlayers[socket.id] === undefined) {
       serverPlayers[socket.id] = player
       console.log(serverPlayers[socket.id]);
     }
     console.log('current serverPlayers : ' + Object.keys(serverPlayers).length);
     // socket.emit('playerId', socket.id)
-    io.emit('serverToClient', serverPlayers)
+    io.emit('newPlayerToClient', {serverPlayers, createdPlayerId: socket.id})
   })
   socket.on('disconnect', () => {
     delete serverPlayers[socket.id]
     console.log('Goodbye id :' + socket.id + ", has disconnected");
     console.log('current serverPlayers : ' + Object.keys(serverPlayers).length);
-    io.emit('serverToClient', serverPlayers)
+    console.log(serverPlayers);
+    io.emit('disconnectToClient', socket.id)
   })
   socket.on('updateToServer', (player) => {
     // console.log('update to server');
@@ -45,7 +46,7 @@ function connected(socket) {
     // console.log('update to server');
     serverPlayers = {}
     console.log(serverPlayers);
-    io.emit('serverToClient', serverPlayers)
+    // io.emit('serverToClient', serverPlayers)
     // console.log('server to client')
   })
 
