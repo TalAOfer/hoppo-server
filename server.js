@@ -1,8 +1,7 @@
 const express = require('express')
 const { emit } = require('nodemon')
 const app = express()
-const port = process.env.port || 3001
-const http = require('http').Server(app)
+const port = 3001
 // const server = app.listen(port)
 const io = require('socket.io')(port, {
   cors: {
@@ -14,11 +13,7 @@ let serverPlayers = {}
 let room = {}
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html')
-})
-
-http.listen(port, () => {
-  console.log(`Listening on port ${port}`);
+  res.send('Hello World!')
 })
 
 console.log('server is up');
