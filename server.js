@@ -10,10 +10,13 @@ const io = require('socket.io')(port, {
 })
 
 let serverPlayers = {}
+let room = {}
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
+
+console.log('server is up');
 
 io.on('connection', connected)
 
