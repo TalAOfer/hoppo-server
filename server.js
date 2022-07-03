@@ -1,7 +1,7 @@
 const express = require('express')
 const { emit } = require('nodemon')
 const app = express()
-const port = 3001
+const port = process.env.port || 3001
 // const server = app.listen(port)
 const io = require('socket.io')(port, {
   cors: {
